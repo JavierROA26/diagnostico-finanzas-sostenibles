@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnóstico de Finanzas Sostenibles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=DM+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --green-deep: #0B3D2E;
+      --green: #0F6E56;
+      --green-mid: #1D9E75;
+      --green-light: #E1F5EE;
+      --gold: #B07A14;
+      --gold-light: #FAEEDA;
+      --cream: #F4F1E9;
+      --paper: #FFFFFF;
+      --ink: #1A2420;
+      --muted: #5E6B64;
+      --line: #E3E0D6;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--ink);
+      background: var(--cream);
+      background-image: radial-gradient(circle at 12% 8%, rgba(15, 110, 86, .06), transparent 40%),
+        radial-gradient(circle at 88% 92%, rgba(176, 122, 20, .05), transparent 40%);
+      min-height: 100vh;
+      line-height: 1.6;
+      padding: 24px 16px;
+    }
+
+    .wrap {
+      max-width: 780px;
+      margin: 0 auto
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(11, 61, 46, .06)
+    }
+
+    .topbar {
+      background: var(--green-deep);
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .logo-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--green-mid);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .topbar-txt b {
+      color: #fff;
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 15px;
+      display: block;
+      letter-spacing: .2px
+    }
+
+    .topbar-txt span {
+      color: #9FE1CB;
+      font-size: 11px;
+      letter-spacing: .5px;
+      text-transform: uppercase
+    }
+
+    .prog {
+      height: 4px;
+      background: var(--green-light)
+    }
+
+    .prog-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--green-mid));
+      transition: width .5s cubic-bezier(.4, 0, .2, 1)
+    }
+
+    .body {
+      padding: 32px 28px
+    }
+
+    .screen {
+      display: none
+    }
+
+    .screen.active {
+      display: block;
+      animation: fi .4s ease
+    }
+
+    @keyframes fi {
+      from {
+        opacity: 0;
+        transform: translateY(12px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    /* Welcome */
+    .hero {
+      text-align: center;
+      padding: 14px 0 6px
+    }
+
+    .hero-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 20px;
+      background: var(--green-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 22px
+    }
+
+    .hero h1 {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 30px;
+      line-height: 1.2;
+      color: var(--green-deep);
+      margin-bottom: 12px
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 480px;
+      margin: 0 auto 24px
+    }
+
+    .pills {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 28px
+    }
+
+    .pill {
+      padding: 6px 14px;
+      border-radius: 30px;
+      background: var(--cream);
+      border: 1px solid var(--line);
+      font-size: 12.5px;
+      color: var(--muted)
+    }
+
+    .pill b {
+      color: var(--green);
+      font-weight: 600
+    }
+
+    .field {
+      text-align: left;
+      max-width: 380px;
+      margin: 0 auto 14px
+    }
+
+    .field label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 6px
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      background: var(--paper);
+      color: var(--ink);
+      outline: none;
+      transition: border-color .15s
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--green-mid)
+    }
+
+    /* Dimensions */
+    .dim-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 15px;
+      border-radius: 30px;
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 8px
+    }
+
+    .dim-badge .n {
+      opacity: .65;
+      font-weight: 500
+    }
+
+    .dim-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 22px;
+      color: var(--green-deep);
+      margin-bottom: 22px
+    }
+
+    .q-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 12px;
+      transition: border-color .2s
+    }
+
+    .q-card.answered {
+      border-color: var(--green-mid)
+    }
+
+    .q-text {
+      font-size: 14.5px;
+      color: var(--ink);
+      margin-bottom: 14px;
+      line-height: 1.55
+    }
+
+    .r-row {
+      display: flex;
+      gap: 7px
+    }
+
+    .r-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 11px 3px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--cream);
+      cursor: pointer;
+      transition: all .15s;
+      font-family: inherit
+    }
+
+    .r-btn:hover {
+      background: var(--paper);
+      border-color: var(--green-mid)
+    }
+
+    .r-num {
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--ink)
+    }
+
+    .r-lbl {
+      font-size: 9.5px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.25
+    }
+
+    .obs-toggle {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--green);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .obs-box {
+      margin-top: 10px;
+      display: none
+    }
+
+    .obs-box.show {
+      display: block
+    }
+
+    .obs-box textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      font-family: inherit;
+      font-size: 13px;
+      resize: vertical;
+      outline: none;
+      color: var(--ink);
+      background: var(--cream)
+    }
+
+    .obs-box textarea:focus {
+      border-color: var(--green-mid);
+      background: var(--paper)
+    }
+
+    /* Open / Multi */
+    .sec-badge {
+      display: inline-block;
+      padding: 6px 15px;
+      border-radius: 30px;
+      background: var(--gold-light);
+      color: var(--gold);
+      font-size: 12.5px;
+      font-weight: 600;
+      margin-bottom: 8px
+    }
+
+    .sec-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 22px;
+      color: var(--green-deep);
+      margin-bottom: 6px
+    }
+
+    .sec-desc {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-bottom: 22px
+    }
+
+    .open-q {
+      margin-bottom: 20px
+    }
+
+    .open-q label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 9px;
+      line-height: 1.5
+    }
+
+    .open-q textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      font-family: inherit;
+      font-size: 14px;
+      resize: vertical;
+      outline: none;
+      color: var(--ink);
+      background: var(--cream);
+      transition: border-color .15s
+    }
+
+    .open-q textarea:focus {
+      border-color: var(--green-mid);
+      background: var(--paper)
+    }
+
+    .multi-group {
+      margin-bottom: 26px
+    }
+
+    .multi-q {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 12px;
+      line-height: 1.5
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px
+    }
+
+    .chip {
+      padding: 9px 14px;
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      font-size: 13px;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all .15s;
+      background: var(--cream);
+      user-select: none
+    }
+
+    .chip:hover {
+      border-color: var(--green-mid)
+    }
+
+    .chip.sel {
+      background: var(--green-light);
+      border-color: var(--green);
+      color: var(--green-deep);
+      font-weight: 500
+    }
+
+    .chip.sel::before {
+      content: '✓ ';
+      color: var(--green)
+    }
+
+    /* Nav */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 26px;
+      gap: 12px
+    }
+
+    .step-ind {
+      font-size: 12.5px;
+      color: var(--muted)
+    }
+
+    .btn-p {
+      padding: 12px 26px;
+      border-radius: 10px;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .15s
+    }
+
+    .btn-p:hover {
+      background: var(--green-deep)
+    }
+
+    .btn-p:disabled {
+      opacity: .35;
+      cursor: default
+    }
+
+    .btn-s {
+      padding: 12px 22px;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      font-size: 14px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .15s
+    }
+
+    .btn-s:hover {
+      background: var(--cream)
+    }
+
+    /* Results */
+    .res-hdr {
+      text-align: center;
+      padding: 8px 0 18px
+    }
+
+    .sc-ring {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 14px
+    }
+
+    .sc-ring svg {
+      transform: rotate(-90deg)
+    }
+
+    .sc-val {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center
+    }
+
+    .sc-val b {
+      font-family: 'Fraunces', serif;
+      font-size: 34px;
+      font-weight: 500;
+      color: var(--green-deep);
+      line-height: 1
+    }
+
+    .sc-val span {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px
+    }
+
+    .res-level {
+      font-family: 'Fraunces', serif;
+      font-weight: 500;
+      font-size: 21px;
+      color: var(--green-deep);
+      margin-bottom: 6px
+    }
+
+    .res-level-desc {
+      font-size: 13.5px;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto
+    }
+
+    .chart-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      height: 340px;
+      margin: 18px auto
+    }
+
+    .dim-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin: 18px 0
+    }
+
+    .d-card {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 14px
+    }
+
+    .dc-nm {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      min-height: 30px;
+      line-height: 1.35
+    }
+
+    .dc-sc {
+      font-family: 'Fraunces', serif;
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 7px;
+      line-height: 1
+    }
+
+    .dc-br {
+      height: 5px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 5px
+    }
+
+    .dc-fl {
+      height: 100%
+    }
+
+    .dc-st {
+      font-size: 11px;
+      font-weight: 500
+    }
+
+    .block {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 16px 0
+    }
+
+    .block-ttl {
+      font-family: 'Fraunces', serif;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--green-deep);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .rec-item {
+      display: flex;
+      gap: 11px;
+      margin-bottom: 13px;
+      font-size: 14px;
+      line-height: 1.6
+    }
+
+    .rec-item:last-child {
+      margin-bottom: 0
+    }
+
+    .rec-dot {
+      flex-shrink: 0;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-top: 7px
+    }
+
+    .action-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 24px;
+      flex-wrap: wrap
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: var(--green-deep);
+      color: #fff;
+      padding: 12px 22px;
+      border-radius: 30px;
+      font-size: 13.5px;
+      font-weight: 500;
+      box-shadow: 0 4px 20px rgba(11, 61, 46, .25);
+      opacity: 0;
+      transition: opacity .3s, transform .3s;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      z-index: 999
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0)
+    }
+
+    .toast-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #9FE1CB;
+      flex-shrink: 0
+    }
+
+    .foot {
+      text-align: center;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 18px
+    }
+
+    @media(max-width:560px) {
+      .body {
+        padding: 24px 18px
+      }
+
+      .hero h1 {
+        font-size: 25px
+      }
+
+      .r-lbl {
+        display: none
+      }
+
+      .r-btn {
+        padding: 13px 3px
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="topbar">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+            <path d="M12 21c5-2 8-6 8-12V4l-8 2-8-2v5c0 6 3 10 8 12z" stroke="#fff" stroke-width="1.5"
+              stroke-linejoin="round" />
+            <path d="M12 14c0-3 1.5-5 4-6M12 14c0-2-1-3.5-3-4.5" stroke="#9FE1CB" stroke-width="1.3"
+              stroke-linecap="round" />
+          </svg>
+        </div>
+        <div class="topbar-txt">
+          <b>Diagnóstico de Finanzas Sostenibles</b>
+          <span>Evaluación ESG empresarial</span>
+        </div>
+      </div>
+      <div class="prog">
+        <div class="prog-fill" id="pf" style="width:0%"></div>
+      </div>
+      <div class="body">
+
+        <!-- WELCOME -->
+        <div class="screen active" id="s0">
+          <div class="hero">
+            <div class="hero-icon">
+              <svg viewBox="0 0 24 24" width="36" height="36" fill="none">
+                <path
+                  d="M3 17c4-1 6-4 6-9 3 1 5 4 5 8M3 17c0 2 2 3 5 3 6 0 11-5 11-12 0-1-.2-2-.5-3-2 1-4 1-6 .5C10 3 7 3 5 5c-1.5 1.5-2 4-2 7v5z"
+                  stroke="#0F6E56" stroke-width="1.4" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <h1>Evalúe la madurez sostenible<br>de su empresa</h1>
+            <p>Diagnóstico de 7 dimensiones ESG que mide su preparación para el financiamiento sostenible y genera un
+              informe con gráfico de araña y recomendaciones accionables.</p>
+            <div class="pills">
+              <span class="pill"><b>7</b> dimensiones</span>
+              <span class="pill"><b>28</b> preguntas</span>
+              <span class="pill"><b>🕸</b> Gráfico de araña</span>
+              <span class="pill"><b>📄</b> Informe PDF</span>
+            </div>
+            <div class="field">
+              <label for="cname">Nombre de la empresa</label>
+              <input type="text" id="cname" placeholder="Ej: Agroindustrial del Oriente S.R.L.">
+            </div>
+            <div class="field">
+              <label for="csector">Sector / rubro</label>
+              <select id="csector">
+                <option value="">Seleccione...</option>
+                <option>Agroindustria</option>
+                <option>Manufactura / Industria</option>
+                <option>Comercio</option>
+                <option>Servicios</option>
+                <option>Construcción</option>
+                <option>Energía</option>
+                <option>Transporte y logística</option>
+                <option>Turismo</option>
+                <option>Tecnología</option>
+                <option>Otro</option>
+              </select>
+            </div>
+            <div class="nav" style="justify-content:center;margin-top:22px">
+              <button class="btn-p" onclick="goTo(1)">Comenzar diagnóstico →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dimension screens (generated by JS) -->
+        <div id="dynDims"></div>
+
+        <!-- OPEN QUESTIONS -->
+        <div class="screen" id="s8">
+          <div class="sec-badge">Preguntas de desarrollo</div>
+          <div class="sec-title">Contexto cualitativo</div>
+          <p class="sec-desc">Estas respuestas enriquecen el análisis. Son opcionales pero recomendadas.</p>
+          <div class="open-q">
+            <label>¿Cuáles son los principales desafíos ambientales y climáticos que enfrenta Santa Cruz, y cuáles son
+              específicos de su sector?</label>
+            <textarea id="o_desafios" rows="3" placeholder="Describa los desafíos..."></textarea>
+          </div>
+          <div class="open-q">
+            <label>¿Cuáles considera que son las 3 principales prioridades de mejora de su empresa en
+              sostenibilidad?</label>
+            <textarea id="o_prioridades" rows="3" placeholder="1. ...  2. ...  3. ..."></textarea>
+          </div>
+          <div class="open-q">
+            <label>¿Cuál considera que es la principal barrera para avanzar en sostenibilidad y acceso a financiamiento
+              sostenible?</label>
+            <textarea id="o_barrera" rows="2" placeholder="Su respuesta..."></textarea>
+          </div>
+          <div class="open-q">
+            <label>¿Qué oportunidades identifica para fortalecer la competitividad de su empresa mediante
+              sostenibilidad?</label>
+            <textarea id="o_oportunidades" rows="3" placeholder="Su respuesta..."></textarea>
+          </div>
+          <div class="nav">
+            <button class="btn-s" onclick="goTo(7)">← Anterior</button>
+            <span class="step-ind">Desarrollo cualitativo</span>
+            <button class="btn-p" onclick="goTo(9)">Siguiente →</button>
+          </div>
+        </div>
+
+        <!-- MULTI SELECT -->
+        <div class="screen" id="s9">
+          <div class="sec-badge">Necesidades y prioridades</div>
+          <div class="sec-title">Barreras, criterios e incentivos</div>
+          <p class="sec-desc">Marque todas las opciones que apliquen a su empresa.</p>
+          <div id="multiContainer"></div>
+          <div class="nav">
+            <button class="btn-s" onclick="goTo(8)">← Anterior</button>
+            <span class="step-ind">Último paso</span>
+            <button class="btn-p" onclick="showRes()">Ver resultados →</button>
+          </div>
+        </div>
+
+        <!-- RESULTS -->
+        <div class="screen" id="s10"></div>
+
+      </div><!-- /body -->
+    </div><!-- /card -->
+    <p class="foot">Herramienta de autodiagnóstico · Los resultados son orientativos y no constituyen una evaluación
+      financiera formal.</p>
+  </div><!-- /wrap -->
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast"><span class="toast-dot"></span><span id="toast-msg">Datos registrados</span></div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════
+    //  CONFIGURACIÓN — solo edita esta línea
+    //  Pega aquí la URL de tu Google Apps Script
+    // ═══════════════════════════════════════════════════════════════
+    const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzHlTJFQa_mLgmlkOb73PjjoYza2LiZm5PYp-BruETpQUpoq8ynuaPOByDl07jRqzTgCA/exec';
+    // ═══════════════════════════════════════════════════════════════
+
+    const DIMS = [
+      {
+        id: 'gov', n: 'Liderazgo y Gobernanza', sh: 'Gobernanza', c: '#0F6E56', bg: '#E1F5EE', tc: '#085041',
+        q: ['¿La alta dirección reconoce que los temas ambientales y sociales pueden afectar la competitividad y acceso a financiamiento de la empresa?',
+          '¿Existen responsables definidos para temas de sostenibilidad, cumplimiento o gestión AS?',
+          '¿La empresa incorpora temas ambientales o sociales en decisiones estratégicas o de inversión?',
+          '¿La empresa tiene políticas, lineamientos o compromisos relacionados con sostenibilidad?']
+      },
+      {
+        id: 'amb', n: 'Gestión Ambiental y Social', sh: 'Ambiental/Social', c: '#1D9E75', bg: '#E1F5EE', tc: '#085041',
+        q: ['¿La empresa identifica impactos o riesgos ambientales y sociales asociados a sus operaciones?',
+          '¿La empresa implementa acciones para prevenir, mitigar o gestionar impactos ambientales y sociales?',
+          '¿La empresa evalúa riesgos relacionados con trabajadores, comunidades o salud y seguridad?',
+          '¿La empresa considera criterios ambientales y sociales en su cadena de suministro o proveedores?']
+      },
+      {
+        id: 'cum', n: 'Cumplimiento y Gestión de Riesgos', sh: 'Cumplimiento', c: '#3B6D11', bg: '#EAF3DE', tc: '#27500A',
+        q: ['¿La empresa mantiene organizada y actualizada su documentación regulatoria y permisos?',
+          '¿La empresa tiene mecanismos para identificar y gestionar riesgos operativos, legales o reputacionales?',
+          '¿La empresa cuenta con protocolos para responder ante incidentes ambientales, sociales o laborales?',
+          '¿La empresa revisa periódicamente el cumplimiento de requisitos legales relevantes?']
+      },
+      {
+        id: 'inf', n: 'Información y Trazabilidad', sh: 'Trazabilidad', c: '#185FA5', bg: '#E6F1FB', tc: '#0C447C',
+        q: ['¿La empresa cuenta con indicadores o información para medir desempeño ambiental o social?',
+          '¿La empresa documenta sus acciones, avances o resultados relacionados con sostenibilidad?',
+          '¿La empresa puede demostrar evidencia de buenas prácticas ante clientes, bancos o inversionistas?',
+          '¿La empresa comunica interna o externamente sus avances en sostenibilidad?']
+      },
+      {
+        id: 'per', n: 'Personas y Cultura Organizacional', sh: 'Cultura', c: '#B07A14', bg: '#FAEEDA', tc: '#633806',
+        q: ['¿El personal recibe capacitación relacionada con sostenibilidad, seguridad o gestión de riesgos?',
+          '¿La empresa promueve una cultura de mejora continua y responsabilidad?',
+          '¿Existen mecanismos para escuchar preocupaciones o sugerencias de trabajadores o actores relevantes?',
+          '¿La sostenibilidad forma parte de la cultura organizacional o valores empresariales?']
+      },
+      {
+        id: 'cli', n: 'Cambio Climático y Resiliencia', sh: 'Clima', c: '#0F6E56', bg: '#E1F5EE', tc: '#085041',
+        q: ['¿La empresa ha identificado cómo el cambio climático podría afectar su operación o cadena de valor?',
+          '¿La empresa implementa medidas de eficiencia, ahorro de recursos o resiliencia?',
+          '¿La empresa identifica oportunidades de negocio vinculadas a sostenibilidad o economía verde?',
+          '¿La empresa considera riesgos futuros relacionados con clima, recursos naturales o mercado?']
+      },
+      {
+        id: 'fsf', n: 'Preparación para Financiamiento Sostenible', sh: 'Financiamiento', c: '#B07A14', bg: '#FAEEDA', tc: '#633806',
+        q: ['¿La empresa conoce los requisitos que bancos o financiadores evalúan en sostenibilidad?',
+          '¿La empresa tiene proyectos o iniciativas que podrían ser financiables bajo esquemas sostenibles?',
+          '¿La empresa podría presentar información estructurada sobre sostenibilidad a un financiador?',
+          '¿La empresa cuenta con una visión o plan para fortalecer su preparación financiera sostenible?']
+      },
+    ];
+
+    const MULTI = [
+      {
+        id: 'barreras', q: '¿Qué barreras enfrenta su organización para invertir en sostenibilidad?',
+        o: ['Falta de financiamiento accesible (tasas altas, plazos cortos)',
+          'Falta de información o datos confiables', 'Falta de asistencia técnica o capacitación',
+          'Incertidumbre regulatoria', 'Alto costo inicial de tecnologías o prácticas sostenibles',
+          'Riesgo percibido (climático, de mercado, político)']
+      },
+      {
+        id: 'criterios', q: '¿Qué criterios de sostenibilidad serían más relevantes para su empresa?',
+        o: ['Reducción de emisiones', 'Uso eficiente del agua', 'Cero deforestación', 'Gestión de residuos', 'Eficiencia energética']
+      },
+      {
+        id: 'taxonomia', q: '¿Qué características debería tener una taxonomía para que sea útil?',
+        o: ['Criterios claros y fáciles de aplicar', 'Adaptada a empresas pequeñas y grandes',
+          'Reconocida por bancos y entidades financieras', 'Que evite el greenwashing',
+          'Con asistencia técnica para cumplir']
+      },
+      {
+        id: 'incentivos', q: '¿Qué incentivos acelerarían la transición sostenible en su sector?',
+        o: ['Tasas de interés preferenciales para proyectos verdes', 'Plazos de crédito más largos (10-15 años)',
+          'Exenciones o reducciones impositivas', 'Asistencia técnica gratuita o subsidiada',
+          'Reconocimiento o certificación pública', 'Acceso a mercados premium o diferenciados']
+      },
+    ];
+
+    const REC = {
+      gov: 'Designar un responsable de sostenibilidad y formalizar una política ESG aprobada por la dirección, integrándola en las decisiones de inversión.',
+      amb: 'Realizar un mapeo de impactos y riesgos ambientales y sociales de las operaciones y la cadena de suministro, con un plan de mitigación.',
+      cum: 'Centralizar permisos y licencias en un registro actualizado y establecer protocolos de respuesta ante incidentes ambientales y laborales.',
+      inf: 'Definir indicadores ESG clave y documentar resultados de forma verificable para demostrar buenas prácticas ante financiadores.',
+      per: 'Implementar capacitaciones en sostenibilidad y crear canales de escucha para trabajadores y comunidades, reforzando la cultura organizacional.',
+      cli: 'Analizar los riesgos climáticos sobre la operación y la cadena de valor e implementar medidas de eficiencia y oportunidades de economía verde.',
+      fsf: 'Estructurar la información ESG según los requisitos de la banca e identificar proyectos elegibles para esquemas de financiamiento verde.',
+    };
+
+    const A = {}, MULTIANS = {};
+    let RC = null;
+
+    function rl(v) { return ['Muy bajo', 'Bajo', 'Moderado', 'Bueno', 'Excelente'][v - 1] }
+
+    // ─── Build question screens ───────────────────────────────────
+    function build() {
+      const c = document.getElementById('dynDims');
+      DIMS.forEach((d, i) => {
+        const el = document.createElement('div');
+        el.className = 'screen'; el.id = 's' + (i + 1);
+        el.innerHTML =
+          `<div class="dim-badge" style="background:${d.bg};color:${d.tc}">
+         <span class="n">Dimensión ${i + 1}/7</span> · ${d.n}
+       </div>
+       <div class="dim-title">${d.n}</div>` +
+          d.q.map((q, qi) =>
+            `<div class="q-card" id="${d.id}c${qi}">
+           <div class="q-text">${q}</div>
+           <div class="r-row" id="${d.id}r${qi}">` +
+            [1, 2, 3, 4, 5].map(v =>
+              `<button class="r-btn" onclick="pick('${d.id}',${qi},${v})">
+             <span class="r-num">${v}</span>
+             <span class="r-lbl">${rl(v)}</span>
+           </button>`).join('') +
+            `</div>
+           <button class="obs-toggle" onclick="tog('${d.id}',${qi})">+ Agregar observación</button>
+           <div class="obs-box" id="${d.id}o${qi}">
+             <textarea rows="2" placeholder="Observación (opcional)"></textarea>
+           </div>
+         </div>`).join('') +
+          `<div class="nav">
+         <button class="btn-s" onclick="goTo(${i})">← Anterior</button>
+         <span class="step-ind">Dimensión ${i + 1} de 7</span>
+         <button class="btn-p" id="nb${i + 1}" onclick="goTo(${i + 2})" disabled>
+           ${i === 6 ? 'Continuar →' : 'Siguiente →'}
+         </button>
+       </div>`;
+        c.appendChild(el);
+      });
+
+      const mc = document.getElementById('multiContainer');
+      MULTI.forEach(m => {
+        MULTIANS[m.id] = [];
+        const g = document.createElement('div'); g.className = 'multi-group';
+        g.innerHTML =
+          `<div class="multi-q">${m.q}</div>
+       <div class="chips">` +
+          m.o.map((o, oi) =>
+            `<span class="chip" onclick="togChip('${m.id}',${oi},this)">${o}</span>`
+          ).join('') + `</div>`;
+        mc.appendChild(g);
+      });
+    }
+
+    function tog(did, qi) {
+      document.getElementById(did + 'o' + qi).classList.toggle('show');
+    }
+
+    function pick(did, qi, val) {
+      if (!A[did]) A[did] = [0, 0, 0, 0];
+      A[did][qi] = val;
+      const d = DIMS.find(x => x.id === did);
+      document.getElementById(did + 'r' + qi).querySelectorAll('.r-btn').forEach((b, i) => {
+        const sel = i + 1 === val;
+        b.style.background = sel ? d.bg : '';
+        b.style.borderColor = sel ? d.c : '';
+        b.querySelector('.r-num').style.color = sel ? d.tc : '';
+        b.querySelector('.r-lbl').style.color = sel ? d.tc : '';
+      });
+      document.getElementById(did + 'c' + qi).classList.add('answered');
+      const nb = document.getElementById('nb' + (DIMS.findIndex(x => x.id === did) + 1));
+      if (nb) nb.disabled = !A[did].every(v => v > 0);
+    }
+
+    function togChip(mid, oi, el) {
+      const arr = MULTIANS[mid];
+      const txt = MULTI.find(m => m.id === mid).o[oi];
+      const p = arr.indexOf(txt);
+      if (p >= 0) { arr.splice(p, 1); el.classList.remove('sel'); }
+      else { arr.push(txt); el.classList.add('sel'); }
+    }
+
+    function goTo(n) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('s' + n).classList.add('active');
+      document.getElementById('pf').style.width = (n / 10 * 100) + '%';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function sc(did) {
+      const v = A[did] || [1, 1, 1, 1];
+      return +(v.reduce((a, b) => a + b, 0) / v.length).toFixed(2);
+    }
+
+    function stOf(s) {
+      if (s >= 4.5) return { l: 'Excelente', c: '#0F6E56' };
+      if (s >= 3.5) return { l: 'Bueno', c: '#3B6D11' };
+      if (s >= 2.5) return { l: 'Moderado', c: '#B07A14' };
+      if (s >= 1.5) return { l: 'Por mejorar', c: '#D85A30' };
+      return { l: 'Crítico', c: '#A32D2D' };
+    }
+
+    function level(avg) {
+      if (avg >= 4) return { n: 'Líder en sostenibilidad', d: 'Su empresa cuenta con prácticas ESG consolidadas y está bien posicionada para acceder a financiamiento sostenible. El foco debe ser certificar, comunicar y mantener el liderazgo.' };
+      if (avg >= 3) return { n: 'En consolidación', d: 'Existen buenas prácticas establecidas. Con mayor formalización y trazabilidad, su empresa estará lista para presentarse ante financiadores sostenibles.' };
+      if (avg >= 2) return { n: 'En desarrollo', d: 'Hay bases iniciales, pero falta estructura, documentación y responsables claros. Es el momento de formalizar la gestión de sostenibilidad.' };
+      return { n: 'Etapa inicial', d: 'Su empresa comienza su recorrido en sostenibilidad. Conviene priorizar gobernanza, identificación de riesgos y formación del equipo.' };
+    }
+
+    // ─── Toast ────────────────────────────────────────────────────
+    function showToast(msg, ok = true) {
+      const t = document.getElementById('toast');
+      const dot = t.querySelector('.toast-dot');
+      document.getElementById('toast-msg').textContent = msg;
+      dot.style.background = ok ? '#9FE1CB' : '#F09595';
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // ─── Send to Google Sheets ────────────────────────────────────
+    function enviarASheets(ds, avg, lv) {
+      if (!SHEETS_URL || SHEETS_URL.includes('PEGA_AQUI')) return;
+
+      const payload = {
+        empresa: document.getElementById('cname').value || 'Anónimo',
+        sector: document.getElementById('csector').value || '',
+        // Scores por dimensión
+        gov: ds.find(d => d.id === 'gov').s,
+        amb: ds.find(d => d.id === 'amb').s,
+        cum: ds.find(d => d.id === 'cum').s,
+        inf: ds.find(d => d.id === 'inf').s,
+        per: ds.find(d => d.id === 'per').s,
+        cli: ds.find(d => d.id === 'cli').s,
+        fsf: ds.find(d => d.id === 'fsf').s,
+        // Global
+        total: avg,
+        nivel: lv.n,
+        // Preguntas abiertas
+        o_desafios: document.getElementById('o_desafios').value,
+        o_prioridades: document.getElementById('o_prioridades').value,
+        o_barrera: document.getElementById('o_barrera').value,
+        o_oportunidades: document.getElementById('o_oportunidades').value,
+        // Selección múltiple
+        barreras: MULTIANS['barreras'] || [],
+        criterios: MULTIANS['criterios'] || [],
+        taxonomia: MULTIANS['taxonomia'] || [],
+        incentivos: MULTIANS['incentivos'] || [],
+      };
+
+      fetch(SHEETS_URL, { method: 'POST', body: JSON.stringify(payload) })
+        .then(r => r.json())
+        .then(data => {
+          if (data.ok) showToast('✓ Datos guardados en el registro');
+        })
+        .catch(() => {
+          showToast('No se pudo conectar con el registro', false);
+        });
+    }
+
+    // ─── Results ──────────────────────────────────────────────────
+    function showRes() {
+      goTo(10);
+
+      const ds = DIMS.map(d => ({ ...d, s: sc(d.id) }));
+      const avg = +(ds.reduce((s, d) => s + d.s, 0) / ds.length).toFixed(1);
+      const lv = level(avg);
+      const weak = [...ds].sort((a, b) => a.s - b.s).slice(0, 3);
+      const best = [...ds].sort((a, b) => b.s - a.s)[0];
+      const circ = 2 * Math.PI * 52, off = circ * (1 - avg / 5);
+
+      // ── Enviar a Google Sheets ──
+      enviarASheets(ds, avg, lv);
+
+      document.getElementById('s10').innerHTML = `
+    <div class="res-hdr">
+      <div class="sc-ring">
+        <svg viewBox="0 0 120 120" width="120" height="120">
+          <circle cx="60" cy="60" r="52" fill="none" stroke="#E1F5EE" stroke-width="11"/>
+          <circle cx="60" cy="60" r="52" fill="none" stroke="#0F6E56" stroke-width="11"
+                  stroke-linecap="round"
+                  stroke-dasharray="${circ}" stroke-dashoffset="${off}"/>
+        </svg>
+        <div class="sc-val"><b>${avg}</b><span>de 5.0</span></div>
+      </div>
+      <div class="res-level">${lv.n}</div>
+      <div class="res-level-desc">${lv.d}</div>
+    </div>
+
+    <div class="chart-wrap">
+      <canvas id="rc" role="img"
+        aria-label="Gráfico de araña ESG: ${ds.map(d => d.sh + ' ' + d.s).join(', ')}">
+        Resultados del diagnóstico por dimensión.
+      </canvas>
+    </div>
+
+    <div class="dim-grid">
+      ${ds.map(d => {
+        const s2 = stOf(d.s);
+        return `<div class="d-card">
+          <div class="dc-nm">${d.n}</div>
+          <div class="dc-sc" style="color:${s2.c}">${d.s.toFixed(1)}</div>
+          <div class="dc-br"><div class="dc-fl" style="width:${d.s / 5 * 100}%;background:${s2.c}"></div></div>
+          <div class="dc-st" style="color:${s2.c}">${s2.l}</div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <div class="block">
+      <div class="block-ttl">🎯 Prioridades de acción</div>
+      ${weak.map(d => `
+        <div class="rec-item">
+          <span class="rec-dot" style="background:${stOf(d.s).c}"></span>
+          <span><strong>${d.n} (${d.s.toFixed(1)}/5):</strong> ${REC[d.id]}</span>
+        </div>`).join('')}
+    </div>
+
+    <div class="block">
+      <div class="block-ttl">🌱 Fortaleza para capitalizar</div>
+      <div class="rec-item">
+        <span class="rec-dot" style="background:#0F6E56"></span>
+        <span><strong>${best.n} (${best.s.toFixed(1)}/5)</strong> es su área más desarrollada.
+        Úsela como base para demostrar credibilidad ante financiadores e impulsar las dimensiones más débiles.</span>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-p" onclick="dlPDF()">⬇ Descargar informe PDF</button>
+      <button class="btn-s" onclick="goTo(0)">Nuevo diagnóstico</button>
+    </div>`;
+
+      window._ds = ds;
+      window._avg = avg;
+      window._lv = lv;
+      window._weak = weak;
+      window._best = best;
+
+      setTimeout(() => {
+        RC = new Chart(document.getElementById('rc').getContext('2d'), {
+          type: 'radar',
+          data: {
+            labels: ds.map(d => d.sh),
+            datasets: [{
+              data: ds.map(d => d.s),
+              backgroundColor: 'rgba(15,110,86,0.13)',
+              borderColor: '#0F6E56', borderWidth: 2,
+              pointBackgroundColor: '#0F6E56',
+              pointBorderColor: '#fff', pointBorderWidth: 2,
+              pointRadius: 5, pointHoverRadius: 7,
+            }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            scales: {
+              r: {
+                min: 0, max: 5,
+                ticks: { stepSize: 1, font: { size: 10 }, color: '#9aa', backdropColor: 'transparent' },
+                grid: { color: 'rgba(15,110,86,0.1)' },
+                angleLines: { color: 'rgba(15,110,86,0.1)' },
+                pointLabels: { font: { size: 11.5, family: 'DM Sans', weight: '500' }, color: '#5E6B64' }
+              }
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: { label: i => i.raw.toFixed(1) + ' / 5' } }
+            }
+          }
+        });
+      }, 150);
+    }
+
+    // ─── PDF ──────────────────────────────────────────────────────
+    function ascii(s) { return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[¿¡]/g, '') }
+    function hRgb(h) { return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)] }
+
+    function dlPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const W = 210, H = 297;
+      const comp = document.getElementById('cname').value || 'Su Empresa';
+      const sect = document.getElementById('csector').value || '';
+
+      // Header
+      doc.setFillColor(11, 61, 46); doc.rect(0, 0, W, 44, 'F');
+      doc.setFillColor(29, 158, 117); doc.rect(0, 44, W, 2, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(20); doc.setFont('helvetica', 'bold');
+      doc.text('Diagnostico de Finanzas Sostenibles', 20, 20);
+      doc.setFontSize(10); doc.setFont('helvetica', 'normal');
+      doc.setTextColor(159, 225, 203);
+      doc.text('Informe de evaluacion ESG empresarial', 20, 29);
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+      doc.text(ascii(comp), W - 15, 20, { align: 'right' });
+      doc.setFontSize(9); doc.setFont('helvetica', 'normal');
+      doc.setTextColor(159, 225, 203);
+      if (sect) doc.text(ascii(sect), W - 15, 27, { align: 'right' });
+      doc.text(new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }), W - 15, 33, { align: 'right' });
+
+      // Score + level
+      doc.setTextColor(11, 61, 46);
+      doc.setFontSize(14); doc.setFont('helvetica', 'bold');
+      doc.text(ascii(window._lv.n), 20, 58);
+      doc.setTextColor(15, 110, 86); doc.setFontSize(12);
+      doc.text('Puntuacion ESG global: ' + window._avg + ' / 5.0', 20, 66);
+      doc.setTextColor(90, 90, 90); doc.setFontSize(9.5); doc.setFont('helvetica', 'normal');
+      doc.text(doc.splitTextToSize(ascii(window._lv.d), 120), 20, 73);
+
+      // Radar image (right side)
+      const cv = document.getElementById('rc');
+      if (cv && RC) doc.addImage(cv.toDataURL('image/png'), 'PNG', 138, 52, 62, 55);
+
+      // Dimension bars
+      let y = 98;
+      doc.setTextColor(11, 61, 46); doc.setFontSize(12); doc.setFont('helvetica', 'bold');
+      doc.text('Resultados por dimension', 20, y); y += 8;
+      window._ds.forEach(d => {
+        const s2 = stOf(d.s); const [r, g, b] = hRgb(s2.c);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5); doc.setTextColor(45, 45, 45);
+        doc.text(ascii(d.n), 20, y); y += 3.5;
+        doc.setFillColor(228, 224, 214); doc.rect(20, y, 130, 4.5, 'F');
+        doc.setFillColor(r, g, b); doc.rect(20, y, 130 * (d.s / 5), 4.5, 'F');
+        doc.setFont('helvetica', 'bold'); doc.setTextColor(r, g, b);
+        doc.text(d.s.toFixed(1) + ' - ' + ascii(s2.l), 155, y + 4); y += 9.5;
+      });
+
+      // Recommendations
+      y += 3;
+      doc.setTextColor(11, 61, 46); doc.setFontSize(12); doc.setFont('helvetica', 'bold');
+      doc.text('Prioridades de accion', 20, y); y += 8;
+      window._weak.forEach(d => {
+        if (y > 270) { doc.addPage(); y = 20; }
+        doc.setFontSize(9.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(15, 110, 86);
+        doc.text(ascii(d.n) + ' (' + d.s.toFixed(1) + '/5):', 20, y); y += 4.5;
+        doc.setFont('helvetica', 'normal'); doc.setTextColor(70, 70, 70);
+        const ln = doc.splitTextToSize(ascii(REC[d.id]), W - 40);
+        doc.text(ln, 20, y); y += ln.length * 4.5 + 5;
+      });
+
+      // Qualitative answers
+      const oD = document.getElementById('o_desafios').value;
+      const oP = document.getElementById('o_prioridades').value;
+      const oB = document.getElementById('o_barrera').value;
+      const oO = document.getElementById('o_oportunidades').value;
+      const opens = [
+        ['Desafios ambientales y climaticos', oD],
+        ['Prioridades de mejora', oP],
+        ['Principal barrera', oB],
+        ['Oportunidades de competitividad', oO],
+      ];
+      const hasOpen = opens.some(o => o[1].trim()) || Object.values(MULTIANS).some(a => a.length);
+
+      if (hasOpen) {
+        if (y > 235) { doc.addPage(); y = 20; } else { y += 3; }
+        doc.setTextColor(11, 61, 46); doc.setFontSize(12); doc.setFont('helvetica', 'bold');
+        doc.text('Respuestas cualitativas', 20, y); y += 8;
+        opens.forEach(o => {
+          if (!o[1].trim()) return;
+          if (y > 262) { doc.addPage(); y = 20; }
+          doc.setFontSize(9.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(45, 45, 45);
+          doc.text(ascii(o[0]), 20, y); y += 4.5;
+          doc.setFont('helvetica', 'normal'); doc.setTextColor(70, 70, 70);
+          const ln = doc.splitTextToSize(ascii(o[1]), W - 40);
+          doc.text(ln, 20, y); y += ln.length * 4.5 + 5;
+        });
+        MULTI.forEach(m => {
+          const sel = MULTIANS[m.id]; if (!sel.length) return;
+          if (y > 255) { doc.addPage(); y = 20; }
+          doc.setFontSize(9.5); doc.setFont('helvetica', 'bold'); doc.setTextColor(45, 45, 45);
+          doc.text(ascii(m.q), 20, y); y += 4.5;
+          doc.setFont('helvetica', 'normal'); doc.setTextColor(70, 70, 70);
+          sel.forEach(s => {
+            if (y > 270) { doc.addPage(); y = 20; }
+            const ln = doc.splitTextToSize('- ' + ascii(s), W - 44);
+            doc.text(ln, 24, y); y += ln.length * 4.3;
+          });
+          y += 4;
+        });
+      }
+
+      // Footer on all pages
+      const pg = doc.internal.getNumberOfPages();
+      for (let i = 1; i <= pg; i++) {
+        doc.setPage(i);
+        doc.setFillColor(244, 241, 233); doc.rect(0, H - 12, W, 12, 'F');
+        doc.setTextColor(150, 150, 150); doc.setFontSize(8);
+        doc.text(ascii(comp) + ' | Diagnostico de Finanzas Sostenibles | Pagina ' + i + ' de ' + pg, W / 2, H - 4.5, { align: 'center' });
+      }
+
+      doc.save('diagnostico-finanzas-sostenibles.pdf');
+    }
+
+    // ─── Init ─────────────────────────────────────────────────────
+    build();
+  </script>
+</body>
+
+</html>
