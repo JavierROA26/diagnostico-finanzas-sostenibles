@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Diagnóstico de Finanzas Sostenibles</title>
+  <title>Diagnóstico de Madurez ESG — Santa Cruz Distrito ZERO</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -20,12 +20,13 @@
       --green-light: #E1F5EE;
       --gold: #B07A14;
       --gold-light: #FAEEDA;
-      --cream: #F4F1E9;
+      --cream: #F5F3EE;
       --paper: #FFFFFF;
-      --ink: #1A2420;
+      --ink: #111C18;
       --muted: #5E6B64;
       --line: #E3E0D6;
-      --radius: 14px;
+      --radius: 12px;
+      --shadow: 0 2px 16px rgba(11, 61, 46, .07);
     }
 
     * {
@@ -55,15 +56,16 @@
       border: 1px solid var(--line);
       border-radius: var(--radius);
       overflow: hidden;
-      box-shadow: 0 4px 24px rgba(11, 61, 46, .06)
+      box-shadow: 0 4px 32px rgba(11, 61, 46, .09), 0 1px 4px rgba(11, 61, 46, .04)
     }
 
     .topbar {
-      background: var(--green-deep);
-      padding: 18px 28px;
+      background: linear-gradient(135deg, #0B3D2E 0%, #0e5240 100%);
+      padding: 16px 28px;
       display: flex;
       align-items: center;
-      gap: 12px
+      gap: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, .06)
     }
 
     .logo-mark {
@@ -136,30 +138,33 @@
     }
 
     .hero-icon {
-      width: 72px;
-      height: 72px;
-      border-radius: 20px;
-      background: var(--green-light);
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--green-light) 0%, #c8eede 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 22px
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 14px rgba(15, 110, 86, .12)
     }
 
     .hero h1 {
       font-family: 'Fraunces', serif;
       font-weight: 500;
-      font-size: 30px;
-      line-height: 1.2;
+      font-size: 28px;
+      line-height: 1.25;
       color: var(--green-deep);
-      margin-bottom: 12px
+      margin-bottom: 14px;
+      letter-spacing: -.3px
     }
 
     .hero p {
       color: var(--muted);
-      font-size: 15px;
-      max-width: 480px;
-      margin: 0 auto 24px
+      font-size: 14.5px;
+      max-width: 500px;
+      margin: 0 auto 24px;
+      line-height: 1.7
     }
 
     .pills {
@@ -186,35 +191,38 @@
 
     .field {
       text-align: left;
-      max-width: 380px;
+      max-width: 400px;
       margin: 0 auto 14px
     }
 
     .field label {
       display: block;
-      font-size: 12.5px;
-      font-weight: 500;
+      font-size: 12px;
+      font-weight: 600;
       color: var(--ink);
-      margin-bottom: 6px
+      margin-bottom: 7px;
+      letter-spacing: .3px;
+      text-transform: uppercase
     }
 
     .field input,
     .field select {
       width: 100%;
-      padding: 11px 13px;
-      border: 1px solid var(--line);
+      padding: 12px 14px;
+      border: 1.5px solid var(--line);
       border-radius: 10px;
       font-family: inherit;
       font-size: 14px;
       background: var(--paper);
       color: var(--ink);
       outline: none;
-      transition: border-color .15s
+      transition: border-color .2s, box-shadow .2s
     }
 
     .field input:focus,
     .field select:focus {
-      border-color: var(--green-mid)
+      border-color: var(--green-mid);
+      box-shadow: 0 0 0 3px rgba(29, 158, 117, .12)
     }
 
     /* Dimensions */
@@ -612,16 +620,22 @@
       background: var(--cream);
       border: 1px solid var(--line);
       border-radius: 12px;
-      padding: 20px;
-      margin: 16px 0
+      padding: 22px;
+      margin: 14px 0
+    }
+
+    .block.next-steps {
+      background: linear-gradient(135deg, #EAF6F0 0%, #f3f9f6 100%);
+      border-color: rgba(15, 110, 86, .2);
+      border-left: 4px solid var(--green)
     }
 
     .block-ttl {
       font-family: 'Fraunces', serif;
-      font-size: 16px;
+      font-size: 15.5px;
       font-weight: 500;
       color: var(--green-deep);
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 8px
@@ -693,9 +707,13 @@
 
     .foot {
       text-align: center;
-      font-size: 11.5px;
+      font-size: 11px;
       color: var(--muted);
-      margin-top: 18px
+      margin-top: 20px;
+      line-height: 1.7;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto
     }
 
     @media(max-width:560px) {
@@ -731,8 +749,8 @@
           </svg>
         </div>
         <div class="topbar-txt">
-          <b>Diagnóstico de Finanzas Sostenibles</b>
-          <span>Evaluación ESG empresarial</span>
+          <b>Diagnóstico de Madurez ESG</b>
+          <span>Santa Cruz Distrito ZERO</span>
         </div>
       </div>
       <div class="prog">
@@ -750,9 +768,10 @@
                   stroke="#0F6E56" stroke-width="1.4" stroke-linejoin="round" />
               </svg>
             </div>
-            <h1>Evalúe la madurez sostenible<br>de su empresa</h1>
-            <p>Diagnóstico de 7 dimensiones ESG que mide su preparación para el financiamiento sostenible y genera un
-              informe con gráfico de araña y recomendaciones accionables.</p>
+            <h1>Diagnóstico de Madurez ESG</h1>
+            <p>En el marco del proyecto Santa Cruz Distrito ZERO, este diagnóstico evalúa la madurez de su empresa en 7
+              dimensiones ESG clave y genera un informe personalizado con gráfico de araña, brechas prioritarias y
+              recomendaciones para fortalecer su elegibilidad ante financiadores sostenibles.</p>
             <div class="pills">
               <span class="pill"><b>7</b> dimensiones</span>
               <span class="pill"><b>28</b> preguntas</span>
@@ -779,6 +798,16 @@
                 <option>Otro</option>
               </select>
             </div>
+            <div class="field">
+              <label for="cempleados">Cantidad de empleados</label>
+              <select id="cempleados">
+                <option value="">Seleccione...</option>
+                <option>1-10</option>
+                <option>11-50</option>
+                <option>51-200</option>
+                <option>Más de 200</option>
+              </select>
+            </div>
             <div class="nav" style="justify-content:center;margin-top:22px">
               <button class="btn-p" onclick="goTo(1)">Comenzar diagnóstico →</button>
             </div>
@@ -791,8 +820,9 @@
         <!-- OPEN QUESTIONS -->
         <div class="screen" id="s8">
           <div class="sec-badge">Preguntas de desarrollo</div>
-          <div class="sec-title">Contexto cualitativo</div>
-          <p class="sec-desc">Estas respuestas enriquecen el análisis. Son opcionales pero recomendadas.</p>
+          <div class="sec-title">Contexto estratégico y territorial</div>
+          <p class="sec-desc">Estas preguntas complementan el diagnóstico cuantitativo y permiten identificar el
+            contexto específico de su empresa para la construcción de su hoja de ruta financiero-sostenible.</p>
           <div class="open-q">
             <label>¿Cuáles son los principales desafíos ambientales y climáticos que enfrenta Santa Cruz, y cuáles son
               específicos de su sector?</label>
@@ -838,8 +868,8 @@
 
       </div><!-- /body -->
     </div><!-- /card -->
-    <p class="foot">Herramienta de autodiagnóstico · Los resultados son orientativos y no constituyen una evaluación
-      financiera formal.</p>
+    <p class="foot">Proyecto Santa Cruz Distrito ZERO · Herramienta de autodiagnóstico ESG ·<br>Los resultados son
+      orientativos y forman parte del proceso de acompañamiento empresarial.</p>
   </div><!-- /wrap -->
 
   <!-- Toast notification -->
@@ -850,7 +880,7 @@
     //  CONFIGURACIÓN — solo edita esta línea
     //  Pega aquí la URL de tu Google Apps Script
     // ═══════════════════════════════════════════════════════════════
-    const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzHlTJFQa_mLgmlkOb73PjjoYza2LiZm5PYp-BruETpQUpoq8ynuaPOByDl07jRqzTgCA/exec';
+    const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxsW0WAPy4epP-imY77VAYebHZm8l92KQKrp3SWb1YJCa6zvH4JUYmoJVnQGONW5Vn9-g/exec';
     // ═══════════════════════════════════════════════════════════════
 
     const DIMS = [
@@ -1068,6 +1098,7 @@
       const payload = {
         empresa: document.getElementById('cname').value || 'Anónimo',
         sector: document.getElementById('csector').value || '',
+        empleados: document.getElementById('cempleados').value || '',
         // Scores por dimensión
         gov: ds.find(d => d.id === 'gov').s,
         amb: ds.find(d => d.id === 'amb').s,
@@ -1091,14 +1122,9 @@
         incentivos: MULTIANS['incentivos'] || [],
       };
 
-      fetch(SHEETS_URL, { method: 'POST', body: JSON.stringify(payload) })
-        .then(r => r.json())
-        .then(data => {
-          if (data.ok) showToast('✓ Datos guardados en el registro');
-        })
-        .catch(() => {
-          showToast('No se pudo conectar con el registro', false);
-        });
+      fetch(SHEETS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) })
+        .then(() => showToast('✓ Respuestas registradas correctamente'))
+        .catch(() => showToast('No se pudo conectar con el registro', false));
     }
 
     // ─── Results ──────────────────────────────────────────────────
@@ -1167,6 +1193,14 @@
       </div>
     </div>
 
+    <div class="block next-steps">
+      <div class="block-ttl">📋 Próximos pasos — Santa Cruz Distrito ZERO</div>
+      <div class="rec-item">
+        <span class="rec-dot" style="background:var(--green)"></span>
+        <span>Con base en este diagnóstico, el equipo facilitador trabajará con usted en la construcción de su <strong>Hoja de Ruta Financiero-Sostenible</strong>, identificando acciones prioritarias de corto plazo (quick wins) y mecanismos de gobernanza para mejorar su elegibilidad ante bancos, fondos y programas de financiamiento sostenible.</span>
+      </div>
+    </div>
+
     <div class="action-row">
       <button class="btn-p" onclick="dlPDF()">⬇ Descargar informe PDF</button>
       <button class="btn-s" onclick="goTo(0)">Nuevo diagnóstico</button>
@@ -1227,17 +1261,21 @@
       doc.setFillColor(11, 61, 46); doc.rect(0, 0, W, 44, 'F');
       doc.setFillColor(29, 158, 117); doc.rect(0, 44, W, 2, 'F');
       doc.setTextColor(255, 255, 255);
-      doc.setFontSize(20); doc.setFont('helvetica', 'bold');
-      doc.text('Diagnostico de Finanzas Sostenibles', 20, 20);
-      doc.setFontSize(10); doc.setFont('helvetica', 'normal');
-      doc.setTextColor(159, 225, 203);
-      doc.text('Informe de evaluacion ESG empresarial', 20, 29);
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(11); doc.setFont('helvetica', 'bold');
-      doc.text(ascii(comp), W - 15, 20, { align: 'right' });
+      doc.setFontSize(18); doc.setFont('helvetica', 'bold');
+      doc.text('Diagnostico de Madurez ESG', 20, 18);
       doc.setFontSize(9); doc.setFont('helvetica', 'normal');
       doc.setTextColor(159, 225, 203);
-      if (sect) doc.text(ascii(sect), W - 15, 27, { align: 'right' });
+      doc.text('Proyecto Santa Cruz Distrito ZERO', 20, 26);
+      doc.setFontSize(8.5);
+      doc.text('Herramienta de autodiagnostico ESG empresarial', 20, 33);
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(11); doc.setFont('helvetica', 'bold');
+      doc.text(ascii(comp), W - 15, 18, { align: 'right' });
+      doc.setFontSize(8.5); doc.setFont('helvetica', 'normal');
+      doc.setTextColor(159, 225, 203);
+      const emp = document.getElementById('cempleados') ? document.getElementById('cempleados').value : '';
+      const sectorLine = [ascii(sect), emp ? emp + ' empleados' : ''].filter(Boolean).join(' · ');
+      if (sectorLine) doc.text(sectorLine, W - 15, 26, { align: 'right' });
       doc.text(new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }), W - 15, 33, { align: 'right' });
 
       // Score + level
